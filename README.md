@@ -1,5 +1,5 @@
 <br>
-<h1 align="center">OwO Farm Bot V1.0.3 </h1>
+<h1 align="center">OwO Farm Bot V0.0.0 </h1>
 
 </p>
 
@@ -46,7 +46,7 @@
     -   All Main Token Features
     -   Auto Pray for Main Token
 
-## ⚙・config.json example
+## ⚙・data.json example
 
 ```
 {
