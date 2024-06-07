@@ -51,70 +51,89 @@
 ```
 {
     "settings": {
-        "huntandbattle": "", true or false
-        "banbypass": "", true or false
-        "discordrpc": "", true or false
-        "pray": "", true or false
-        "extratoken": "", true or false
-        "autoquest": "", true or false
+        "prefix": "owo",
+        "bot_prefix": "! or any prefix this use to run bot like !run, !reset, !stop",
+        "owo": "true or false",
+        "pray": "true or false, main for pray to main or extra for pray to extra",
+        "curse": "true or false,  main for curse to main or extra for curse to extra",
+        "hunt": "true or false",
+        "battle": "true or false",
+        "autoquest": "true or false",
+        "randommess": "true or false",
+        "banbypass": "true or false",
+        "extratoken": "true or false",
+        "presence": "true or false",
+        "auto_update": "true or false",
         "inventory": {
-            "inventorycheck": "", true or false
-            "gemcheck": "", true or false
-            "lootboxcheck": "", true or false
-            "fabledlootboxcheck": "", true or false
-            "cratecheck": "", true or false
-            "eventcheck": "" true or false
+            "inventorycheck": "true or false",
+            "gemcheck": "true or false",
+            "lootboxcheck": "true or false",
+            "fabledlootboxcheck": "true or false",
+            "cratecheck": "true or false"
         },
         "animals": {
-            "enable": "", true or false
-            "type": "" sell or sacrifice
-            "ifsacrifice": {
-                "common": "", true or false
-                "uncommon": "", true or false
-                "rare": "", true or false
-                "epic": "", true or false
-                "mythical": "", true or false
-                "patreon": "", true or false
-                "cpatreon": "", true or false
-                "legendary": "", true or false
-                "gem": "", true or false
-                "bot": "", true or false
-                "distorted": "", true or false
-                "fabled": "", true or false
-                "special": "", true or false
-                "hidden": "" true or false
+            "enable": "true or false",
+            "type": "sell or sac",
+            "animaltype": {
+                "common": "true or false",
+                "uncommon": "true or false",
+                "rare": "true or false",
+                "epic": "true or false",
+                "mythical": "true or false",
+                "patreon": "true or false",
+                "cpatreon": "true or false",
+                "legendary": "true or false",
+                "gem": "true or false",
+                "bot": "true or false",
+                "distorted": "true or false",
+                "fabled": "true or false",
+                "special": "true or false",
+                "hidden": "true or false"
             }
         },
         "upgradeautohunt": {
-            "enable": "", true or false
-            "type": "" efficiency, duration, cost, gain, exp or radar
+            "enable": "true or false",
+            "upgtype": "efficiency, duration, cost, gain, exp or radar"
         },
         "gamble": {
             "coinflip": {
-                "enable": "", true or false
-                "amount": "1"
+                "enable": "true or false",
+                "amount": "any amount"
             },
             "slots": {
-                "enable": "", true or false
-                "amount": "1"
+                "enable": "true or false",
+                "amount": "any amount"
             }
         }
     },
     "main":{
-        "token":"", main token
-        "userid":"", token user id
-        "channelid":"", channel id for main token
-        "owodmchannelid":"" owo bot dm channel id
-        "autoquestchannelid":"" auto quest channel id
+        "token":"main token",
+        "userid":"token user id",
+        "channelid":"channel id for main token",
+        "owodmchannelid":"owo bot dm channel id",
+        "autoquestchannelid": "auto quest channel id" 
     },
     "extra":{
-        "token":"", extra token
-        "userid":"", extra token user id
-        "channelid":"", channel id for extra token
-        "owodmchannelid":"" extra token owo bot dm channel id
+        "token":"extra token", 
+        "userid":"extra token user id", 
+        "channelid":"channel id for extra token", 
+        "owodmchannelid":"extra token owo bot dm channel id",
+        "autoquestchannelid": "auto quest channel id" 
+    },
+
+    "custom_presence": { you can watch how to create custom_presence 
+        "client_id": "", https://www.youtube.com/watch?v=o-XdyzYijNw
+        "state": "",
+        "large_image": "",
+        "small_image": "",
+        "large_text": "",
+        "small_text": "",
+        "label1": "",
+        "label2": "",
+        "label_link1": "",
+        "label_link2": ""
     }
 }
-
 
 ```
 
