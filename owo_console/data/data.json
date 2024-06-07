@@ -1,0 +1,84 @@
+{
+    "settings": {
+        "prefix": "owo",
+        "bot_prefix": "!",
+        "owo": "true",
+        "pray": "true",
+        "curse": "false",
+        "hunt": "true",
+        "battle": "true",
+        "autoquest": "true",
+        "randommess": "true",
+        "banbypass": "true",
+        "extratoken": "true",
+        "presence": "true",
+        "auto_update": "true",
+        "inventory": {
+            "inventorycheck": "true",
+            "gemcheck": "true",
+            "lootboxcheck": "true",
+            "fabledlootboxcheck": "true",
+            "cratecheck": ""
+        },
+        "animals": {
+            "enable": "true",
+            "type": "sell",
+            "animaltype": {
+                "common": "true",
+                "uncommon": "true",
+                "rare": "true",
+                "epic": "true",
+                "mythical": "true",
+                "patreon": "true",
+                "cpatreon": "true",
+                "legendary": "true",
+                "gem": "true",
+                "bot": "true",
+                "distorted": "true",
+                "fabled": "true",
+                "special": "true",
+                "hidden": "true"
+            }
+        },
+        "upgradeautohunt": {
+            "enable": "true",
+            "upgtype": "gain"
+        },
+        "gamble": {
+            "coinflip": {
+                "enable": "",
+                "amount": "1"
+            },
+            "slots": {
+                "enable": "",
+                "amount": "1"
+            }
+        }
+    },
+    "main": {
+        "token": "",
+        "userid": "",
+        "channelid": "",
+        "owodmchannelid": "",
+        "autoquestchannelid": ""
+    },
+    "extra": {
+        "token": "",
+        "userid": "",
+        "channelid": "",
+        "owodmchannelid": "",
+        "autoquestchannelid": ""
+    },
+    "custom_presence": {
+        "client_id": "",
+        "state": "",
+        "large_image": "",
+        "small_image": "",
+        "large_text": "",
+        "small_text": "",
+        "label1": "",
+        "label2": "",
+        "label_link1": "",
+        "label_link2": ""
+    }
+}
