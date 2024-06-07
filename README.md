@@ -14,6 +14,7 @@
 
 
 ## ❗・Important
+-   You should use 2 account for access dual auto quest
 -   Use of this farm bot may lead to actions being taken against your OwO profile and/or your Discord account. I am not responsible for them.
 -   DO NOT USE ONE CHANNEL FOR TWO ACCOUNTS, USE IT FOR 1 ACCOUNT ONLY.
 -   Discord may restart as a result of discord rpc overload.
