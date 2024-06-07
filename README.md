@@ -5,10 +5,9 @@
 
 [❗・Important](#important)<br>
 [👑・Features](#features)<br>
-[⚙・Config.json example](#configjson-example)<br>
+[⚙・data.json example](#configjson-example)<br>
 [💎・Get Token](#get-token)<br>
 [📍・OwO DM channel id](#owo-dm-channel-id)<br>
-[📚・Discord RPC](#discord-rpc)<br>
 [⚠️・Captcha Alert](#captcha-alert)<br>
 [🔗・Required Links](#required-links)<br>
 [🎈・Usage](#usage)<br>
