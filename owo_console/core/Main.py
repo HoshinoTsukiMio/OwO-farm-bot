@@ -124,7 +124,7 @@ captcha_check_var = False
 if (extra_token == main_token):
     extratokencheck = "false"
 
-version = "0.0.0.0"
+version = "0.0.0.0.1"
 
 #========================================================================================================================
 def checkversion():
@@ -576,7 +576,7 @@ def checklist(token, tokentype, channelid):
                     )
         time.sleep(0.01)
 #========================================================================================================================
-def run__bot__captcha(token, tokentype, channelid, dmchannelid):
+def run__bot__captcha(token, tokentype, channelid, dmchannelid, var1, var2):
     while True:
         global active_bot, capcha_flag, task_bot_active, captcha_check_var, main_thread, extra_thread
         response = requests.get(
@@ -589,8 +589,8 @@ def run__bot__captcha(token, tokentype, channelid, dmchannelid):
         )
         with open(file_cache, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        id_DM = data["capcha_id_Dm"]
-        id_message = data["capcha_id_message"]
+        id_DM = data[f"{var1}"]
+        id_message = data[f"{var2}"]
         try:
             body = response.json()
             content = body[0]["content"]
@@ -610,8 +610,8 @@ def run__bot__captcha(token, tokentype, channelid, dmchannelid):
                 (id_mess != id_message) and 
                 (id_messdm != id_DM) and 
                 capcha_flag == False):
-                data["capcha_id_Dm"] = id_mess
-                data["capcha_id_message"] = id_messdm
+                data[f"{var1}"] = id_mess
+                data[f"{var2}"] = id_messdm
                 with open(file_cache, "w", encoding="utf-8") as g:
                     json.dump(data, g)
                 active_bot = False
@@ -1601,18 +1601,9 @@ def extra_account():
             extra__run__bot__gamble_thread.start()
 
 
-def controller(token, channelid1, channelid2):
+def controller(token, channelid, var):
     def send_mess(messages):
-        r1 = requests.post(f"https://discord.com/api/v9/channels/{channelid1}/messages",
-        headers={"authorization": token},
-        json={
-            "content": messages,        
-            'nonce': nonce(),
-            "tts": False,
-            "flags": 0,
-                }
-        )
-        r2 = requests.post(f"https://discord.com/api/v9/channels/{channelid2}/messages",
+        requests.post(f"https://discord.com/api/v9/channels/{channelid}/messages",
         headers={"authorization": token},
         json={
             "content": messages,        
@@ -1624,44 +1615,33 @@ def controller(token, channelid1, channelid2):
     while True:
         global task_bot_active, active_bot, captcha_check_var , main_thread, extra_thread, capcha_flag
         response = requests.get(
-            f"https://discord.com/api/v9/channels/{channelid1}/messages?limit=1",
+            f"https://discord.com/api/v9/channels/{channelid}/messages?limit=1",
             headers={"authorization": token},
             ) 
-        response_ = requests.get(
-            f"https://discord.com/api/v9/channels/{channelid2}/messages?limit=1",
-            headers={"authorization": token},
-            )
         body = response.json()
         author = body[0]["author"]
         id = author["id"]
-        main_id_mess_ = body[0]["id"]
+        var_id_mess_ = body[0]["id"]
 
-        body_ = response_.json()
-        author_ = body_[0]["author"]
-        id_ = author_["id"]
-        extra_id_mess_ = body_[0]["id"]
         with open(file_cache, 'r', encoding='utf-8') as u:
             data = json.load(u)
-        id_mess_main = data["activate_bot_id_main"]
-        id_mess_extra = data["activate_bot_id_extra"]
-        if (((id == main_id) or (id == extra_id) or (id_ == main_id) or (id_ == extra_id)) and
-            (main_id_mess_ != id_mess_main) and
-            (extra_id_mess_ != id_mess_extra)
-            ):
-            content_ = body_[0]["content"]
+        id_mess_var = data[f"{var}"]
+
+        if (((id == main_id) or (id == extra_id)) and
+            (var_id_mess_ != id_mess_var)):
+
             content = body[0]["content"]
-            data["activate_bot_id_main"] = main_id_mess_
-            data["activate_bot_id_extra"] = extra_id_mess_
+            data[f"{var}"] = var_id_mess_
             with open(file_cache, "w", encoding="utf-8") as i:
                 json.dump(data, i)
-            if (content == f"{bot_prefix}stop") or (content_ == f"{bot_prefix}stop"):
+            if (content == f"{bot_prefix}stop"):
                 send_mess('Bot stopped!')
                 active_bot = False
                 task_bot_active = False
                 
                 main_thread.join()
                 extra_thread.join()
-            elif (content == f"{bot_prefix}run") or (content_ == f"{bot_prefix}run"):
+            elif (content == f"{bot_prefix}run"):
                 if task_bot_active == False:
                     send_mess('Bot is Runing!')
                     main_thread = threading.Thread(target=main_account)
@@ -1675,7 +1655,7 @@ def controller(token, channelid1, channelid2):
                     active_bot = True
                 else:
                     send_mess('Bot has already runned!')
-            elif (content == f"{bot_prefix}reset") or (content_ == f"{bot_prefix}reset"):
+            elif (content == f"{bot_prefix}reset"):
                 send_mess('Bot resetted!')
                 active_bot = True
                 capcha_flag = False
@@ -1689,25 +1669,30 @@ def controller(token, channelid1, channelid2):
 
                 main_thread.start()
                 extra_thread.start()
-        time.sleep(0.01)    
+        time.sleep(0.001)    
 
 
 if __name__ == '__main__':
-    run__bot__captcha_thread = threading.Thread(target=run__bot__captcha, args=(main_token, "Main Token", main_channelid, main_owodmchannelid))
-    run__bot__captcha_thread.start()
-    if etoken:
-        extra__run__bot__captcha_thread = threading.Thread(target=run__bot__captcha, args=(extra_token, "Extra Token", extra_channelid, extra_owodmchannelid))
-        extra__run__bot__captcha_thread.start()
 
-    
+    checkversion()
+    show_presence()
     main_thread = threading.Thread(target=main_account)
     extra_thread = threading.Thread(target=extra_account)
 
     main_thread.start()
     extra_thread.start()
+    run__bot__captcha_thread = threading.Thread(target=run__bot__captcha, args=(main_token, "Main Token", main_channelid, main_owodmchannelid,"capcha_id_Dm_main","capcha_id_message_main"))
+    controller_thread1 = threading.Thread(target=controller, args=(main_token, main_channelid, "activate_bot_id_main"))
+    run__bot__captcha_thread.start()
+    controller_thread1.start()
+
+    if etoken:
+        extra__run__bot__captcha_thread = threading.Thread(target=run__bot__captcha, args=(extra_token, "Extra Token", extra_channelid, extra_owodmchannelid, "capcha_id_Dm_extra","capcha_id_message_extra"))
+        controller_thread2 = threading.Thread(target=controller, args=(extra_token, extra_channelid, "activate_bot_id_extra"))
+        extra__run__bot__captcha_thread.start()
+        controller_thread2.start()
     
-    controller_thread = threading.Thread(target=controller, args=(main_token, main_channelid, extra_channelid))
-    controller_thread.start()
+    
     while True:
         time.sleep(1)
 
