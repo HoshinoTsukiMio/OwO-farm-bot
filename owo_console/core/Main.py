@@ -604,11 +604,10 @@ def run__bot__captcha(token, tokentype, channelid, dmchannelid, var1, var2, user
             id_messdm= bodydm[0]["id"]
             if (body == None ):
                     dmprotectprouwu(token, channelid, tokentype)
-            elif (((("captcha" in content) and(f"⚠️ **|** <@{userid}>" in content)) or ("Are you a real human?" in  contentmd)) and 
+            elif (((("captcha" in content) and (f"⚠️ **|** <@{userid}>" in content)) or ("Are you a real human?" in  contentmd)) and 
                 ((id == "408785106942164992")or(iddm == "408785106942164992")) and 
-                (id_mess != id_message) and 
-                (id_messdm != id_DM) and 
-                capcha_flag == False):
+                ((id_mess != id_message) and (id_messdm != id_DM)) and 
+                (capcha_flag == False)):
                 data[f"{var1}"] = id_mess
                 data[f"{var2}"] = id_messdm
                 with open(file_cache, "w", encoding="utf-8") as g:
