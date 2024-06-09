@@ -129,9 +129,10 @@ version = "0.0.0.0.1"
 #========================================================================================================================
 def checkversion():
     if autochecknewversion == "true":
-        versions = requests.get('https://raw.githubusercontent.com/HoshinoTsukiMio/OwO-farm-bot/Main/owo_console/data/version.cache')
-        if versions  != version:
-            print("New version detected\n run file update_bot.bat if you want update")
+        response = requests.get('https://raw.githubusercontent.com/HoshinoTsukiMio/OwO-farm-bot/Main/owo_console/data/version')
+        versions = response.text.strip()
+        if versions != version:
+            print("New version detected\nrun file update_bot.bat if you want update")
 #========================================================================================================================
 def show_presence(): # this only work on discord app not web
     if presence == "true":
