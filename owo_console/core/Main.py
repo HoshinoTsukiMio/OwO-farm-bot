@@ -575,7 +575,7 @@ def checklist(token, tokentype, channelid):
                         red("Unable to get Checklist❗")
                     )
 #========================================================================================================================
-def run__bot__captcha(token, tokentype, channelid, dmchannelid, var1, var2):
+def run__bot__captcha(token, tokentype, channelid, dmchannelid, var1, var2, userid):
     while True:
         global active_bot, capcha_flag, task_bot_active, captcha_check_var, main_thread, extra_thread
         response = requests.get(
@@ -604,7 +604,7 @@ def run__bot__captcha(token, tokentype, channelid, dmchannelid, var1, var2):
             id_messdm= bodydm[0]["id"]
             if (body == None ):
                     dmprotectprouwu(token, channelid, tokentype)
-            elif ((("captcha" in content) or ("Are you a real human?" in  contentmd)) and 
+            elif (((("captcha" in content) and(f"⚠️ **|** <@{userid}>" in content)) or ("Are you a real human?" in  contentmd)) and 
                 ((id == "408785106942164992")or(iddm == "408785106942164992")) and 
                 (id_mess != id_message) and 
                 (id_messdm != id_DM) and 
@@ -1679,13 +1679,13 @@ if __name__ == '__main__':
 
     main_thread.start()
     extra_thread.start()
-    run__bot__captcha_thread = threading.Thread(target=run__bot__captcha, args=(main_token, "Main Token", main_channelid, main_owodmchannelid,"capcha_id_Dm_main","capcha_id_message_main"))
+    run__bot__captcha_thread = threading.Thread(target=run__bot__captcha, args=(main_token, "Main Token", main_channelid, main_owodmchannelid,"capcha_id_Dm_main","capcha_id_message_main", main_id))
     controller_thread1 = threading.Thread(target=controller, args=(main_token, main_channelid, "activate_bot_id_main"))
     run__bot__captcha_thread.start()
     controller_thread1.start()
 
     if etoken:
-        extra__run__bot__captcha_thread = threading.Thread(target=run__bot__captcha, args=(extra_token, "Extra Token", extra_channelid, extra_owodmchannelid, "capcha_id_Dm_extra","capcha_id_message_extra"))
+        extra__run__bot__captcha_thread = threading.Thread(target=run__bot__captcha, args=(extra_token, "Extra Token", extra_channelid, extra_owodmchannelid, "capcha_id_Dm_extra","capcha_id_message_extra", extra_id))
         controller_thread2 = threading.Thread(target=controller, args=(extra_token, extra_channelid, "activate_bot_id_extra"))
         extra__run__bot__captcha_thread.start()
         controller_thread2.start()
