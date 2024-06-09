@@ -1483,7 +1483,8 @@ def run__bot__animal(tokens, tokentypes, channelid, a_types):
      while True:
         global active_bot
         if active_bot:
-            bot_animals(tokens, tokentypes, channelid, a_types)
+            if a_enable =="true":
+                bot_animals(tokens, tokentypes, channelid, a_types)
         else:
             break
         time.sleep(60)
