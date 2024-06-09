@@ -664,7 +664,7 @@ def checkinv(token, channelid, tokentype):
             print(
                 red(f"{datetime.datetime.now().strftime('%H:%M:%S')} ") +
                 magenta(f"[{tokentype}]") +
-                blue(" inventory checking 🔍 (type-1)")
+                blue(" inventory checking 🔍")
             )
             if "gem1" not in cont:
                 collection.append("huntgem")
@@ -678,7 +678,7 @@ def checkinv(token, channelid, tokentype):
                 getinv(token, channelid, tokentype, "gemvar", collection)
     else:
         print(
-            f"{datetime.datetime.now().strftime('%H:%M:%S')} [{tokentype}] inventory checking 🔍 (type-2)"
+            f"{datetime.datetime.now().strftime('%H:%M:%S')} [{tokentype}] inventory checking 🔍"
         )
         getinv(token, channelid, tokentype, "nogem", ["nocollection"])
 #========================================================================================================================
@@ -1289,7 +1289,7 @@ def getquests(tokenst,tokenrd,useridst,channelid, tokentype, type):
                 with open(file_cache, "w", encoding='utf-8') as k:
                     json.dump(data, k)
 
-                print(red(f"{datetime.datetime.now().strftime('%H:%M:%S')}") +
+                print(red(f"{datetime.datetime.now().strftime('%H:%M:%S')} ") +
                     magenta(f"[{tokentype}]") +
                     yellow(" You have already finished all of your quests!")
                 )
