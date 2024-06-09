@@ -18,7 +18,6 @@ current_dir = os.getcwd()
 # Join the current directory with the filename
 flie_data = os.path.join(current_dir, 'data\\data.json')
 file_cache = os.path.join(current_dir, 'data\\cache.json')
-print(flie_data)
 #Call cfg.json file 
 with open(flie_data, 'r', encoding='utf-8') as a:
     cfgs = json.load(a)
@@ -488,17 +487,17 @@ def upgradeall(token, tokentype, channelid):
 #▒█▀▀█ █░░█ █▀▀ █▀▀ ▀▀█▀▀ 　 █▀▀█ █▀▀▄ █▀▀▄ 　 ▒█░░░ ░▀░ █▀▀ ▀▀█▀▀ 
 #▒█░▒█ █░░█ █▀▀ ▀▀█ ░░█░░ 　 █▄▄█ █░░█ █░░█ 　 ▒█░░░ ▀█▀ ▀▀█ ░░█░░ 
 #░▀▀█▄ ░▀▀▀ ▀▀▀ ▀▀▀ ░░▀░░ 　 ▀░░▀ ▀░░▀ ▀▀▀░ 　 ▒█▄▄█ ▀▀▀ ▀▀▀ ░░▀░░
-def dailycount():
+def dailycount(type):
     with open(file_cache, 'r', encoding='utf-8') as c:
         data = json.load(c)
-    dailychecker = data["dailychecker"]
+    dailychecker = data[f"daily_{type}"]
     base_time = datetime.time(7, 0, 0)
-    day_base = datetime.datetime.strptime(data["day_daily"], "%Y-%m-%d").date()
+    day_base = datetime.datetime.strptime(data[f"day_daily_{type}"], "%Y-%m-%d").date()
     base_datetime = datetime.datetime.combine(day_base, base_time)
     base_datetime_utc = base_datetime.replace(tzinfo=pytz.utc)
     now_utc = datetime.datetime.now(pytz.utc)
     if (base_datetime_utc < now_utc):
-        data["dailychecker"] = "ready"
+        data[f"daily_{type}"] = "ready"
         with open(file_cache, "w", encoding='utf-8') as s:
             json.dump(data, s)
             dailychecker == "ready"
@@ -507,9 +506,8 @@ def dailycount():
         dailychecker == "done"
         return dailychecker
 
-def checklist(token, tokentype, channelid):
-    dailychecker = dailycount()
-    print(dailychecker)
+def checklist(token, tokentype, channelid, type):
+    dailychecker = dailycount(type)
     if dailychecker == "ready":
         requests.post(
             f"https://discord.com/api/v9/channels/{channelid}/messages",
@@ -547,8 +545,8 @@ def checklist(token, tokentype, channelid):
                         with open(file_cache, "r", encoding='utf-8') as d:
                             data = json.load(d)
                         now_utc = datetime.datetime.now(pytz.utc)
-                        data["day_daily"] = now_utc.strftime("%Y-%m-%d")
-                        data["dailychecker"] = "done"
+                        data[f"day_daily_{type}"] = now_utc.strftime("%Y-%m-%d")
+                        data[f"daily_{type}"] = "done"
                         with open(file_cache, "w", encoding='utf-8') as e:
                             json.dump(data, e)
 
@@ -576,7 +574,7 @@ def checklist(token, tokentype, channelid):
                         red("Unable to get Checklist❗")
                     )
 #========================================================================================================================
-def run__bot__captcha(token, tokentype, channelid, dmchannelid, var1, var2, userid):
+def run__bot__captcha(token, tokentype, channelid, dmchannelid, type, userid):
     while True:
         global active_bot, capcha_flag, task_bot_active, captcha_check_var, main_thread, extra_thread
         response = requests.get(
@@ -589,8 +587,8 @@ def run__bot__captcha(token, tokentype, channelid, dmchannelid, var1, var2, user
         )
         with open(file_cache, 'r', encoding='utf-8') as f:
             data = json.load(f)
-        id_DM = data[f"{var1}"]
-        id_message = data[f"{var2}"]
+        id_DM = data[f"capcha_id_dm_{type}"]
+        id_message = data[f"capcha_id_m_{type}"]
         try:
             body = response.json()
             content = body[0]["content"]
@@ -609,8 +607,8 @@ def run__bot__captcha(token, tokentype, channelid, dmchannelid, var1, var2, user
                 ((id == "408785106942164992")or(iddm == "408785106942164992")) and 
                 ((id_mess != id_message) and (id_messdm != id_DM)) and 
                 (capcha_flag == False)):
-                data[f"{var1}"] = id_mess
-                data[f"{var2}"] = id_messdm
+                data[f"capcha_id_m_{type}"] = id_mess
+                data[f"capcha_id_dm_{type}"] = id_messdm
                 with open(file_cache, "w", encoding="utf-8") as g:
                     json.dump(data, g)
                 active_bot = False
@@ -1236,17 +1234,17 @@ def quest_filter(quest):
         quest == "Have a friend use an action command on you"
     return quest
     
-def timecount():
+def timecount(type):
     with open(file_cache, 'r', encoding='utf-8') as h:
         data = json.load(h)
-    questchecker = data["questchecker"]
+    questchecker = data[f"quest_{type}"]
     base_time = datetime.time(7, 0, 0)
-    day_base = datetime.datetime.strptime(data["day_daily"], "%Y-%m-%d").date()
+    day_base = datetime.datetime.strptime(data[f"day_quest_{type}"], "%Y-%m-%d").date()
     base_datetime = datetime.datetime.combine(day_base, base_time)
     base_datetime_utc = base_datetime.replace(tzinfo=pytz.utc)
     now_utc = datetime.datetime.now(pytz.utc)
     if (base_datetime_utc < now_utc):
-        data["questchecker"] = "ready"
+        data[f"quest_{type}"] = "ready"
         with open(file_cache, "w", encoding='utf-8') as i:
             json.dump(data, i)
             questchecker == "ready"
@@ -1255,8 +1253,8 @@ def timecount():
         questchecker == "done"
         return questchecker
         
-def getquests(tokenst,tokenrd,useridst,channelid, tokentype):
-    questchecker = timecount()
+def getquests(tokenst,tokenrd,useridst,channelid, tokentype, type):
+    questchecker = timecount(type)
     global quest, active_bot
     aquests = ""
     bquests = ""
@@ -1286,8 +1284,8 @@ def getquests(tokenst,tokenrd,useridst,channelid, tokentype):
                 with open(file_cache, "r", encoding='utf-8') as j:
                     data = json.load(j)
                 now_utc = datetime.datetime.now(pytz.utc)
-                data["day_quest"] = now_utc.strftime("%Y-%m-%d")
-                data["questchecker"] = "done"
+                data[f"day_quest_{type}"] = now_utc.strftime("%Y-%m-%d")
+                data[f"quest_{type}"] = "done"
                 with open(file_cache, "w", encoding='utf-8') as k:
                     json.dump(data, k)
 
@@ -1416,7 +1414,7 @@ def bot_main():
             else:
                 print(green(f"Main Token ✅"))
                 print(blue(f"[Main Token] User:{body["username"]}{body["discriminator"]}"))
-                checklist(main_token, "Main Token", main_channelid)
+                checklist(main_token, "Main Token", main_channelid, "main")
                 sleepy("Main")
                 print(green("Main Token ✅"))
     except (KeyError, json.JSONDecodeError) as e:
@@ -1444,7 +1442,7 @@ def bot_extra():
                 else:
                     print(green(f"Extra Token ✅"))
                     print(blue(f"[Extra Token] User:{body["username"]} {body["discriminator"]}"))
-                    checklist(extra_token, "Extra Token", extra_channelid)
+                    checklist(extra_token, "Extra Token", extra_channelid, "extra")
                     sleepy("Extra")
                     print(green("Extra Token ✅"))
         except (KeyError, json.JSONDecodeError) as e:
@@ -1557,7 +1555,7 @@ def main_account():
     run__bot__curse_thread = threading.Thread(target=run__bot__curse, args=(main_token, "Main Token", main_channelid, curse))
     run__bot__upgrade_thread = threading.Thread(target=run__bot__upgrade, args=(main_token, "Main Token", main_channelid))
     run__bot__gamble_thread = threading.Thread(target=run__bot__gamble, args=(main_token, "Main Token", main_channelid))
-    run__bot__getquests_thread = threading.Thread(target=getquests, args=(main_token, extra_token, main_id, main_questchannelid, "Main Token"))
+    run__bot__getquests_thread = threading.Thread(target=getquests, args=(main_token, extra_token, main_id, main_questchannelid, "Main Token", "main"))
     bot_main_thread.start()
     time.sleep(10)
     if autoquest == "true":
@@ -1584,7 +1582,7 @@ def extra_account():
         extra__run__bot__curse_thread = threading.Thread(target=run__bot__curse, args=(extra_token, "Extra Token", extra_channelid, curse))
         extra__run__bot__upgrade_thread = threading.Thread(target=run__bot__upgrade, args=(extra_token, "Extra Token", extra_channelid))
         extra__run__bot__gamble_thread = threading.Thread(target=run__bot__gamble, args=(extra_token, "Extra Token", extra_channelid))
-        extra__run__bot__getquests_thread = threading.Thread(target=getquests, args=(extra_token, main_token, extra_id, extra_questchannelid, "Extra Token"))
+        extra__run__bot__getquests_thread = threading.Thread(target=getquests, args=(extra_token, main_token, extra_id, extra_questchannelid, "Extra Token", "extra"))
         bot_extra_thread.start()
         time.sleep(10)
         if etoken:
@@ -1601,7 +1599,7 @@ def extra_account():
             extra__run__bot__gamble_thread.start()
 
 
-def controller(token, channelid, var):
+def controller(token, channelid, type):
     def send_mess(messages):
         requests.post(f"https://discord.com/api/v9/channels/{channelid}/messages",
         headers={"authorization": token},
@@ -1625,13 +1623,13 @@ def controller(token, channelid, var):
 
         with open(file_cache, 'r', encoding='utf-8') as u:
             data = json.load(u)
-        id_mess_var = data[f"{var}"]
+        id_mess_var = data[f"activate_bot_id_{type}"]
 
         if (((id == main_id) or (id == extra_id)) and
             (var_id_mess_ != id_mess_var)):
 
             content = body[0]["content"]
-            data[f"{var}"] = var_id_mess_
+            data[f"activate_bot_id_{type}"] = var_id_mess_
             with open(file_cache, "w", encoding="utf-8") as i:
                 json.dump(data, i)
             if (content == f"{bot_prefix}stop"):
@@ -1680,14 +1678,14 @@ if __name__ == '__main__':
 
     main_thread.start()
     extra_thread.start()
-    run__bot__captcha_thread = threading.Thread(target=run__bot__captcha, args=(main_token, "Main Token", main_channelid, main_owodmchannelid,"capcha_id_Dm_main","capcha_id_message_main", main_id))
-    controller_thread1 = threading.Thread(target=controller, args=(main_token, main_channelid, "activate_bot_id_main"))
+    run__bot__captcha_thread = threading.Thread(target=run__bot__captcha, args=(main_token, "Main Token", main_channelid, main_owodmchannelid,"main", main_id))
+    controller_thread1 = threading.Thread(target=controller, args=(main_token, main_channelid, "main"))
     run__bot__captcha_thread.start()
     controller_thread1.start()
 
     if etoken:
-        extra__run__bot__captcha_thread = threading.Thread(target=run__bot__captcha, args=(extra_token, "Extra Token", extra_channelid, extra_owodmchannelid, "capcha_id_Dm_extra","capcha_id_message_extra", extra_id))
-        controller_thread2 = threading.Thread(target=controller, args=(extra_token, extra_channelid, "activate_bot_id_extra"))
+        extra__run__bot__captcha_thread = threading.Thread(target=run__bot__captcha, args=(extra_token, "Extra Token", extra_channelid, extra_owodmchannelid, "extra", extra_id))
+        controller_thread2 = threading.Thread(target=controller, args=(extra_token, extra_channelid, "extra"))
         extra__run__bot__captcha_thread.start()
         controller_thread2.start()
     
