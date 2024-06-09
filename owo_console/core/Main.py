@@ -1598,6 +1598,14 @@ def extra_account():
             extra__run__bot__upgrade_thread.start()
             extra__run__bot__gamble_thread.start()
 
+def controller_recover():
+    time.sleep(1)
+    print("controller has been fixed")
+    controller_thread1 = threading.Thread(target=controller, args=(main_token, main_channelid, "main"))
+    controller_thread1.start()
+    if etoken:
+        controller_thread2 = threading.Thread(target=controller, args=(extra_token, extra_channelid, "extra"))
+        controller_thread2.start()
 
 def controller(token, channelid, type):
     def send_mess(messages):
@@ -1616,58 +1624,63 @@ def controller(token, channelid, type):
             f"https://discord.com/api/v9/channels/{channelid}/messages?limit=1",
             headers={"authorization": token},
             ) 
-        body = response.json()
-        author = body[0]["author"]
-        id = author["id"]
-        var_id_mess_ = body[0]["id"]
+        try:
+            body = response.json()
+            author = body[0]["author"]
+            id = author["id"]
+            var_id_mess_ = body[0]["id"]
 
-        with open(file_cache, 'r', encoding='utf-8') as u:
-            data = json.load(u)
-        id_mess_var = data[f"activate_bot_id_{type}"]
+            with open(file_cache, 'r', encoding='utf-8') as u:
+                data = json.load(u)
+            id_mess_var = data[f"activate_bot_id_{type}"]
 
-        if (((id == main_id) or (id == extra_id)) and
-            (var_id_mess_ != id_mess_var)):
+            if (((id == main_id) or (id == extra_id)) and
+                (var_id_mess_ != id_mess_var)):
 
-            content = body[0]["content"]
-            data[f"activate_bot_id_{type}"] = var_id_mess_
-            with open(file_cache, "w", encoding="utf-8") as i:
-                json.dump(data, i)
-            if (content == f"{bot_prefix}stop"):
-                send_mess('Bot stopped!')
-                active_bot = False
-                task_bot_active = False
-                
-                main_thread.join()
-                extra_thread.join()
-            elif (content == f"{bot_prefix}run"):
-                if task_bot_active == False:
-                    send_mess('Bot is Runing!')
+                content = body[0]["content"]
+                data[f"activate_bot_id_{type}"] = var_id_mess_
+                with open(file_cache, "w", encoding="utf-8") as i:
+                    json.dump(data, i)
+                if (content == f"{bot_prefix}stop"):
+                    send_mess('Bot stopped!')
+                    active_bot = False
+                    task_bot_active = False
+                    
+                    main_thread.join()
+                    extra_thread.join()
+                elif (content == f"{bot_prefix}run"):
+                    if task_bot_active == False:
+                        send_mess('Bot is Runing!')
+                        main_thread = threading.Thread(target=main_account)
+                        extra_thread = threading.Thread(target=extra_account)
+
+                        main_thread.start()
+                        extra_thread.start()
+                        captcha_check_var = False
+                        task_bot_active = True
+                        capcha_flag = False
+                        active_bot = True
+                    else:
+                        send_mess('Bot has already runned!')
+                elif (content == f"{bot_prefix}reset"):
+                    send_mess('Bot resetted!')
+                    active_bot = True
+                    capcha_flag = False
+                    time.sleep(1)
+
+                    main_thread.join()
+                    extra_thread.join()
+                    time.sleep(1)
                     main_thread = threading.Thread(target=main_account)
                     extra_thread = threading.Thread(target=extra_account)
 
                     main_thread.start()
                     extra_thread.start()
-                    captcha_check_var = False
-                    task_bot_active = True
-                    capcha_flag = False
-                    active_bot = True
-                else:
-                    send_mess('Bot has already runned!')
-            elif (content == f"{bot_prefix}reset"):
-                send_mess('Bot resetted!')
-                active_bot = True
-                capcha_flag = False
+        except json.JSONDecodeError:
+                print("controller is went wrong\nfix in 2s")
+                controller_recover()
                 time.sleep(1)
-
-                main_thread.join()
-                extra_thread.join()
-                time.sleep(1)
-                main_thread = threading.Thread(target=main_account)
-                extra_thread = threading.Thread(target=extra_account)
-
-                main_thread.start()
-                extra_thread.start()
-
+                break
 
 if __name__ == '__main__':
 
