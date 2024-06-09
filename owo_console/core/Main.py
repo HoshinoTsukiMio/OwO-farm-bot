@@ -574,7 +574,6 @@ def checklist(token, tokentype, channelid):
                         magenta(f"[{tokentype}] ") +
                         red("Unable to get Checklist❗")
                     )
-        time.sleep(0.01)
 #========================================================================================================================
 def run__bot__captcha(token, tokentype, channelid, dmchannelid, var1, var2):
     while True:
@@ -1669,7 +1668,6 @@ def controller(token, channelid, var):
 
                 main_thread.start()
                 extra_thread.start()
-        time.sleep(0.001)    
 
 
 if __name__ == '__main__':
@@ -1695,4 +1693,3 @@ if __name__ == '__main__':
     
     while True:
         time.sleep(1)
-
