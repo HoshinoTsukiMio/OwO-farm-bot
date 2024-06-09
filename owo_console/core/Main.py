@@ -664,7 +664,7 @@ def checkinv(token, channelid, tokentype):
             print(
                 red(f"{datetime.datetime.now().strftime('%H:%M:%S')} ") +
                 magenta(f"[{tokentype}]") +
-                blue("inventory checking 🔍 (type-1)")
+                blue(" inventory checking 🔍 (type-1)")
             )
             if "gem1" not in cont:
                 collection.append("huntgem")
@@ -863,7 +863,7 @@ def gemuse(token, gem, channelid, tokentype):
     )
     print(
         red(f"{datetime.datetime.now().strftime('%H:%M:%S')}") +
-        magenta(f"[{tokentype}]") + 
+        magenta(f" [{tokentype}]") + 
         yellow(" Gem ✅")
             )
 #========================================================================================================================
