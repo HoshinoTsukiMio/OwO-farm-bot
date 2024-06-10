@@ -17,7 +17,7 @@ current_dir = os.getcwd()
 
 # Join the current directory with the filename
 flie_data = os.path.join(current_dir, 'data\\data.json')
-file_cache = os.path.join(current_dir, 'data\\cache.cache')
+file_cache = os.path.join(current_dir, 'data\\cache.json')
 #Call cfg.json file 
 with open(flie_data, 'r', encoding='utf-8') as a:
     cfgs = json.load(a)
@@ -490,7 +490,6 @@ def upgradeall(token, tokentype, channelid):
 def dailycount(type):
     with open(file_cache, 'r', encoding='utf-8') as c:
         data = json.load(c)
-    dailychecker = data[f"daily_{type}"]
     base_time = datetime.time(7, 0, 0)
     day_base = datetime.datetime.strptime(data[f"day_daily_{type}"], "%Y-%m-%d").date()
     base_datetime = datetime.datetime.combine(day_base, base_time)
@@ -500,11 +499,11 @@ def dailycount(type):
         data[f"daily_{type}"] = "ready"
         with open(file_cache, "w", encoding='utf-8') as s:
             json.dump(data, s)
-            dailychecker == "ready"
-        return dailychecker
+            dailycheckers = "ready"
+        return dailycheckers
     else:
-        dailychecker == "done"
-        return dailychecker
+        dailycheckers = "done"
+        return dailycheckers
 
 def checklist(token, tokentype, channelid, type):
     dailychecker = dailycount(type)
@@ -1160,7 +1159,6 @@ def quest_filter(quest):
 def timecount(type):
     with open(file_cache, 'r', encoding='utf-8') as h:
         data = json.load(h)
-    questchecker = data[f"quest_{type}"]
     base_time = datetime.time(7, 0, 0)
     day_base = datetime.datetime.strptime(data[f"day_quest_{type}"], "%Y-%m-%d").date()
     base_datetime = datetime.datetime.combine(day_base, base_time)
@@ -1170,11 +1168,11 @@ def timecount(type):
         data[f"quest_{type}"] = "ready"
         with open(file_cache, "w", encoding='utf-8') as i:
             json.dump(data, i)
-            questchecker == "ready"
-        return questchecker
+            questcheckers = "ready"
+        return questcheckers
     else:
-        questchecker == "done"
-        return questchecker
+        questcheckers = "done"
+        return questcheckers
         
 def getquests(tokenst,tokenrd,useridst,channelid, tokentype, type):
     questchecker = timecount(type)
