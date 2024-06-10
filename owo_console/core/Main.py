@@ -574,83 +574,6 @@ def checklist(token, tokentype, channelid, type):
                         red("Unable to get Checklist❗")
                     )
 #========================================================================================================================
-def run__bot__captcha(token, tokentype, channelid, dmchannelid, type, userid):
-    while True:
-        global active_bot, capcha_flag, task_bot_active, captcha_check_var, main_thread, extra_thread
-        response = requests.get(
-            f"https://discord.com/api/v9/channels/{channelid}/messages?limit=1",
-            headers={"authorization": token}
-        )
-        responsedm = requests.get(
-            f"https://discord.com/api/v9/channels/{dmchannelid}/messages?limit=1",
-            headers={"authorization": token}
-        )
-        with open(file_cache, 'r', encoding='utf-8') as f:
-            data = json.load(f)
-        id_DM = data[f"capcha_id_dm_{type}"]
-        id_message = data[f"capcha_id_m_{type}"]
-        try:
-            body = response.json()
-            content = body[0]["content"]
-            author = body[0]["author"]
-            id = author["id"]
-            id_mess= body[0]["id"]
-            
-            bodydm = responsedm.json()
-            contentmd = bodydm[0]["content"]
-            authordm = bodydm[0]["author"]
-            iddm = authordm["id"]
-            id_messdm= bodydm[0]["id"]
-            if (body == None ):
-                    dmprotectprouwu(token, channelid, tokentype)
-            elif (((("captcha" in content) and (f"⚠️ **|** <@{userid}>" in content)) or ("Are you a real human?" in  contentmd)) and 
-                ((id == "408785106942164992")or(iddm == "408785106942164992")) and 
-                ((id_mess != id_message) and (id_messdm != id_DM)) and 
-                (capcha_flag == False)):
-                data[f"capcha_id_m_{type}"] = id_mess
-                data[f"capcha_id_dm_{type}"] = id_messdm
-                with open(file_cache, "w", encoding="utf-8") as g:
-                    json.dump(data, g)
-                active_bot = False
-                print(
-                    red(f"{datetime.datetime.now().strftime('%H:%M:%S')} ") +
-                    magenta(f"[{tokentype}]") +
-                    red(f"Chat Captcha! ❌")
-                )
-                active_bot = False
-                task_bot_active = False
-                captcha_check_var = True
-                capcha_flag = True
-                main_thread.join()
-                extra_thread.join()
-                time.sleep(10)
-                notification_def(tokentype)
-        except (KeyError, json.JSONDecodeError) as e:
-            print(
-                red(f"{datetime.datetime.now().strftime('%H:%M:%S')} ") +
-                magenta(f"[{tokentype}]") +
-                red(f"Error while checking captcha! ⚠️")
-            )
-#========================================================================================================================
-def dmprotectprouwu(token, channelid, tokentype):    
-    try: 
-        requests.post(
-        f"https://discord.com/api/v9/channels/{channelid}/messages",
-        headers={"authorization": token, "super-x": autoseed()},
-        json={
-            "content": "hi bro",        
-            'nonce': nonce(),
-            "tts": False,
-            "flags": 0,
-                },
-    )
-    except (KeyError, json.JSONDecodeError) as e:
-        print(
-            red(f"{datetime.datetime.now().strftime('%H:%M:%S')} ") +
-            magenta(f"[{tokentype}]") +
-            red(" OwO dm channel id incorrect ❌ ")
-        )
-#========================================================================================================================
 def checkinv(token, channelid, tokentype):
     if gemcheck == "true":
         response = requests.get(
@@ -1544,8 +1467,95 @@ def run__bot__gamble(tokens, tokentypes, channelids):
 #██║░░██╗██╔══██║██║░░░░░██║░░░░░  ██╔══██╗██║░░██║░░░██║░░░
 #╚█████╔╝██║░░██║███████╗███████╗  ██████╦╝╚█████╔╝░░░██║░░░
 #░╚════╝░╚═╝░░╚═╝╚══════╝╚══════╝  ╚═════╝░░╚════╝░░░░╚═╝░░░
+def catpcha_recover():
+    run__bot__captcha_thread = threading.Thread(target=run__bot__captcha, args=(main_token, "Main Token", main_channelid, main_owodmchannelid,"main", main_id))
+    run__bot__captcha_thread.start()
 
-
+    if etoken:
+        extra__run__bot__captcha_thread = threading.Thread(target=run__bot__captcha, args=(extra_token, "Extra Token", extra_channelid, extra_owodmchannelid, "extra", extra_id))
+        extra__run__bot__captcha_thread.start()
+    pass
+def run__bot__captcha(token, tokentype, channelid, dmchannelid, type, userid):
+    while True:
+        global active_bot, capcha_flag, task_bot_active, captcha_check_var, main_thread, extra_thread
+        response = requests.get(
+            f"https://discord.com/api/v9/channels/{channelid}/messages?limit=1",
+            headers={"authorization": token}
+        )
+        responsedm = requests.get(
+            f"https://discord.com/api/v9/channels/{dmchannelid}/messages?limit=1",
+            headers={"authorization": token}
+        )
+        with open(file_cache, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        id_DM = data[f"capcha_id_dm_{type}"]
+        id_message = data[f"capcha_id_m_{type}"]
+        try:
+            body = response.json()
+            content = body[0]["content"]
+            author = body[0]["author"]
+            id = author["id"]
+            id_mess= body[0]["id"]
+            
+            bodydm = responsedm.json()
+            contentmd = bodydm[0]["content"]
+            authordm = bodydm[0]["author"]
+            iddm = authordm["id"]
+            id_messdm= bodydm[0]["id"]
+            if (body == None ):
+                    dmprotectprouwu(token, channelid, tokentype)
+            elif (((("captcha" in content) and (f"⚠️ **|** <@{userid}>" in content)) or ("Are you a real human?" in  contentmd)) and 
+                ((id == "408785106942164992")or(iddm == "408785106942164992")) and 
+                ((id_mess != id_message) and (id_messdm != id_DM)) and 
+                (capcha_flag == False)):
+                data[f"capcha_id_m_{type}"] = id_mess
+                data[f"capcha_id_dm_{type}"] = id_messdm
+                with open(file_cache, "w", encoding="utf-8") as g:
+                    json.dump(data, g)
+                active_bot = False
+                print(
+                    red(f"{datetime.datetime.now().strftime('%H:%M:%S')} ") +
+                    magenta(f"[{tokentype}] ") +
+                    red(f"Chat Captcha! ❌")
+                )
+                active_bot = False
+                task_bot_active = False
+                captcha_check_var = True
+                capcha_flag = True
+                main_thread.join()
+                extra_thread.join()
+                time.sleep(10)
+                notification_def(tokentype)
+        except (KeyError, json.JSONDecodeError) as e:
+            print(
+                red(f"{datetime.datetime.now().strftime('%H:%M:%S')} ") +
+                magenta(f"[{tokentype}]") +
+                red(f"Error while checking captcha! ⚠️")
+            )
+            catpcha_recover()
+            time.sleep(2)
+            break
+        time.sleep(0.05)
+#========================================================================================================================
+def dmprotectprouwu(token, channelid, tokentype):    
+    try: 
+        requests.post(
+        f"https://discord.com/api/v9/channels/{channelid}/messages",
+        headers={"authorization": token, "super-x": autoseed()},
+        json={
+            "content": "hi bro",        
+            'nonce': nonce(),
+            "tts": False,
+            "flags": 0,
+                },
+    )
+    except (KeyError, json.JSONDecodeError) as e:
+        print(
+            red(f"{datetime.datetime.now().strftime('%H:%M:%S')} ") +
+            magenta(f"[{tokentype}]") +
+            red(" OwO dm channel id incorrect ❌ ")
+        )
+#========================================================================================================================
 def main_account():
     bot_main_thread = threading.Thread(target=bot_main)
     run__bot__hunt__and__battle_thread = threading.Thread(target=run__bot__hunt__and__battle, args=(main_token, "Main Token", main_channelid))
@@ -1599,7 +1609,6 @@ def extra_account():
             extra__run__bot__gamble_thread.start()
 
 def controller_recover():
-    time.sleep(1)
     print("controller has been fixed")
     controller_thread1 = threading.Thread(target=controller, args=(main_token, main_channelid, "main"))
     controller_thread1.start()
@@ -1677,10 +1686,11 @@ def controller(token, channelid, type):
                     main_thread.start()
                     extra_thread.start()
         except json.JSONDecodeError:
-                print("controller is went wrong\nfix in 2s")
+                print("controller is went wrong")
                 controller_recover()
-                time.sleep(1)
+                time.sleep(2)
                 break
+        time.sleep(0.05)
 
 if __name__ == '__main__':
 
