@@ -17,7 +17,7 @@ current_dir = os.getcwd()
 
 # Join the current directory with the filename
 flie_data = os.path.join(current_dir, 'data\\data.json')
-file_cache = os.path.join(current_dir, 'data\\cache.json')
+file_cache = os.path.join(current_dir, 'data\\cache.cache')
 #Call cfg.json file 
 with open(flie_data, 'r', encoding='utf-8') as a:
     cfgs = json.load(a)
